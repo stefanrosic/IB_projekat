@@ -1,0 +1,44 @@
+package com.bezbednost.model;
+
+import org.springframework.security.core.GrantedAuthority;
+
+public class Authority implements GrantedAuthority{
+
+	private static final long serialVersionUID = 1L;
+	
+	private int id;
+	private String name;
+	
+	public Authority(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public Authority() {}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getAuthority() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
+}
