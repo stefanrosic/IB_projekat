@@ -2,14 +2,20 @@ package com.bezbednost.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Generated;
+import javax.imageio.stream.FileImageInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -27,6 +33,12 @@ public class ReadData {
 	public static void main(String[] args) throws IOException {
 		getDirectoryData();
 		generateXML(files);
+		
+		try {
+			createZip();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void  getDirectoryData() throws IOException {
@@ -44,11 +56,7 @@ public class ReadData {
 			  //primer jednog Path-a za uneti(u nasem projektu se nalazi): ./data
 		  } 
 		}
-		
-		for (File file : files) {
-			System.out.println(file.getName());
-		}
-		
+
 		
 		
 	}
@@ -102,11 +110,41 @@ public class ReadData {
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File("C:\\Users\\Boris\\Desktop\\photos.xml"));
 			transformer.transform(source, result);
+			files.add(new File("C:\\Users\\Boris\\Desktop\\photos.xml"));
+		
+			
+			for (File file : files) {
+				System.out.println(file.getName());
+			}
+			
 			
 			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public static void createZip() throws IOException {
+		FileOutputStream fos = new FileOutputStream("C:\\Users\\Boris\\Desktop\\photos.zip");
+		ZipOutputStream zipOut = new ZipOutputStream(fos);
+		for (File file : files) {
+			FileInputStream fis = new FileInputStream(file);
+			ZipEntry zipEntry = new ZipEntry(file.getName());
+			zipOut.putNextEntry(zipEntry);
+			
+			byte[] bytes = new byte[1024];
+			int length;
+			while((length = fis.read(bytes)) >= 0) {
+				zipOut.write(bytes, 0, length);
+			}
+			fis.close();
+		}
+		zipOut.close();
+		fos.close();		
+		
+		File del = new File("C:\\Users\\Boris\\Desktop\\photos.xml");
+		del.delete();
 		
 	}
 
