@@ -26,6 +26,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import signature.SignEnveloped;
+
 public class ReadData {
 	
 	public static ArrayList<File> files = new ArrayList<>();
@@ -33,8 +35,10 @@ public class ReadData {
 	public static void main(String[] args) throws IOException {
 		getDirectoryData();
 		generateXML(files);
-		
+		SignEnveloped sign = new SignEnveloped();		
+		sign.testIt();
 		try {
+			files.add(new File("./data/photos_signed.xml"));
 			createZip();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,7 +47,7 @@ public class ReadData {
 	
 	public static void  getDirectoryData() throws IOException {
 		
-		System.out.println("Input the path of directory: ");
+		System.out.println("Enter the path of directory: ");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		String path = reader.readLine();
@@ -108,9 +112,9 @@ public class ReadData {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("C:\\Users\\Boris\\Desktop\\photos.xml"));
+			StreamResult result = new StreamResult(new File("./data/photos.xml"));
 			transformer.transform(source, result);
-			files.add(new File("C:\\Users\\Boris\\Desktop\\photos.xml"));
+			files.add(new File("./data/photos.xml"));
 		
 			
 			for (File file : files) {
@@ -126,7 +130,7 @@ public class ReadData {
 	}
 	
 	public static void createZip() throws IOException {
-		FileOutputStream fos = new FileOutputStream("C:\\Users\\Boris\\Desktop\\photos.zip");
+		FileOutputStream fos = new FileOutputStream("./data/photos.zip");
 		ZipOutputStream zipOut = new ZipOutputStream(fos);
 		for (File file : files) {
 			FileInputStream fis = new FileInputStream(file);
@@ -143,7 +147,7 @@ public class ReadData {
 		zipOut.close();
 		fos.close();		
 		
-		File del = new File("C:\\Users\\Boris\\Desktop\\photos.xml");
+		File del = new File("./data/photos.xml");
 		del.delete();
 		
 	}
