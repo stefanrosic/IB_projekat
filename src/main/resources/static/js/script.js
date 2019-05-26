@@ -26,7 +26,9 @@ $(document).ready(function(){
           "password" : txtLoginPasswordInput.val()
         }
         $.post("/auth/login", params ,function(data){
-
+        	if(data != null){
+              window.location.replace('user.html');
+          }
         });
       }
     });

@@ -36,6 +36,8 @@ public class AuthController {
 		User temp = users.stream().filter(a -> a.getEmail().equals(email) && a.getPassword().equals(password))
 				.findFirst().orElse(null);
 		session.setAttribute("user", temp);
+		String demo = System.getProperty("user.home");
+		System.out.println(demo + " =");
 		System.out.println(temp.getEmail());
 		return temp;
 	}
