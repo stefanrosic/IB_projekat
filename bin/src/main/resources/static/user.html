@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Safe photos</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/user.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/user.js"></script>
+</head>
+<body>
+    <nav class="light-blue lighten-1">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo" id="safeLogo">PhotoSafe</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a class = "weight-500" href="#">Your profile</a></li>
+                    <li><a class = "weight-500" href="#">Your uploads</a></li>
+                    <li><a class = "weight-500" href="#">Sign out</a></li>
+                </ul>
+        </div>
+    </nav>
+	<form method="POST" action="/upload" enctype="multipart/form-data" id="uploadDiv">
+	    <div class="file-field input-field ">
+	      <div class="btn light-blue lighten-1">
+	        <span>File</span>
+	        <input type="file" name="file">
+	      </div>
+	      <div class="file-path-wrapper">
+	        <input class="file-path validate" type="text">
+	      </div>
+	    </div>
+	      <button class="btn waves-effect waves-light light-blue lighten-1" type="submit" value="submit" id="submitUpload" name="action">Upload</button>
+    </form>
+</body>
+</html>

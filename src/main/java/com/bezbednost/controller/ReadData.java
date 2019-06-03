@@ -7,11 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Generated;
@@ -23,6 +27,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xml.security.signature.XMLSignature;
+import org.apache.xml.security.transforms.Transforms;
+import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -33,12 +40,9 @@ public class ReadData {
 	public static ArrayList<File> files = new ArrayList<>();
 	
 	public static void main(String[] args) throws IOException {
-		getDirectoryData();
-		generateXML(files);
-		SignEnveloped sign = new SignEnveloped();		
-		sign.testIt();
 		try {
-			files.add(new File("./data/photos_signed.xml"));
+			getDirectoryData();
+			generateXML(files);
 			createZip();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,9 +60,10 @@ public class ReadData {
 
 		for (File file: directory) {
 		  if (file.isFile()) {
-			  files.add(file);
-			  //primer jednog Path-a za uneti(u nasem projektu se nalazi): ./data
-		  } 
+			  if(file.getName().endsWith(".jpg") || file.getName().endsWith(".png") || file.getName().endsWith(".jpeg") ||file.getName().endsWith(".gif")) {
+				  files.add(file);  
+			  }
+		  }
 		}
 
 		
@@ -107,6 +112,24 @@ public class ReadData {
 			dateElement.appendChild(doc.createTextNode(dateFormat.format(date)));
 			rootElement.appendChild(dateElement);
 			
+			//--------------Signature--------------------------------
+			
+			PrivateKey pk = SignEnveloped.readPrivateKey();		
+			Certificate cert = SignEnveloped.readCertificate();
+			
+			XMLSignature sig = new XMLSignature(doc,  null, XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1);
+			Transforms transforms = new Transforms(doc);
+			transforms.addTransform(Transforms.TRANSFORM_ENVELOPED_SIGNATURE);
+			transforms.addTransform(Transforms.TRANSFORM_C14N_EXCL_WITH_COMMENTS);
+			
+			sig.addDocument("", transforms, Constants.ALGO_ID_DIGEST_SHA1);
+			sig.addKeyInfo(cert.getPublicKey());
+			sig.addKeyInfo((X509Certificate) cert);
+			
+			rootElement.appendChild(sig.getElement());
+			
+			sig.sign(pk);	
+			System.out.println("....... signed");
 			
 			
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -121,6 +144,7 @@ public class ReadData {
 				System.out.println(file.getName());
 			}
 			
+			System.out.println("....... ziped");
 			
 			
 		}catch (Exception e) {
@@ -130,8 +154,9 @@ public class ReadData {
 	}
 	
 	public static void createZip() throws IOException {
-		FileOutputStream fos = new FileOutputStream("./data/photos.zip");
+		FileOutputStream fos = new FileOutputStream("./zips/photos.zip");
 		ZipOutputStream zipOut = new ZipOutputStream(fos);
+		
 		for (File file : files) {
 			FileInputStream fis = new FileInputStream(file);
 			ZipEntry zipEntry = new ZipEntry(file.getName());
@@ -145,11 +170,12 @@ public class ReadData {
 			fis.close();
 		}
 		zipOut.close();
-		fos.close();		
+		fos.close();	
 		
 		File del = new File("./data/photos.xml");
 		del.delete();
 		
 	}
+	
 
 }

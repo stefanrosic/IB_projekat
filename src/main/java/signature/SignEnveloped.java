@@ -55,7 +55,7 @@ public class SignEnveloped {
       org.apache.xml.security.Init.init();
   }
 	
-	public void testIt() {
+	public Document testIt() {
 		//ucitava se dokument
 		Document doc = loadDocument(IN_FILE);
 		
@@ -72,6 +72,8 @@ public class SignEnveloped {
 		//snima se dokument
 		saveDocument(doc, OUT_FILE);
 		System.out.println("Signing of document done");
+		return doc;
+		
 	}
 	
 	/**
@@ -139,7 +141,7 @@ public class SignEnveloped {
 	 * Ucitava sertifikat is KS fajla
 	 * alias primer
 	 */
-	private Certificate readCertificate() {
+	public static Certificate readCertificate() {
 		try {
 			//kreiramo instancu KeyStore
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
@@ -181,7 +183,7 @@ public class SignEnveloped {
 	 * Ucitava privatni kljuc is KS fajla
 	 * alias primer
 	 */
-	private PrivateKey readPrivateKey() {
+	public static PrivateKey readPrivateKey() {
 		try {
 			//kreiramo instancu KeyStore
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");

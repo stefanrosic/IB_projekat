@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>PhotoSafe</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <script src="js/jquery-3.4.1.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/script.js"></script>
+
+</head>
+<body>
+    <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo weight-500">PhotoSafe</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#login_modal" id = "open_login_modal" class = "modal-trigger weight-500">Login</a></li>
+      </div>
+          </ul>
+    
+          <ul id="nav-mobile" class="sidenav">
+            <li><a class = "weight-500" href="#">Login</a></li>
+          </ul>
+        </div>
+      </nav>
+
+
+      <!-- Create Account Modal Structure -->
+      <div id="signup_modal" class="modal modal-fixed-footer">
+          <div class="modal-content grey lighten-5">
+            <div class ="row">
+              <h4 class = "col s12 center-align modal-title light-blue-text" >Create Account</h4>
+            </div>
+              <div class="row">
+                  <form class="col s12">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <i class="material-icons prefix">perm_identity</i>
+                        <textarea id="signup_email_input" class="materialize-textarea"></textarea>
+                        <label for="signup_email_input">Email</label>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+  
+                <div class="row">
+                    <form class="col s12">
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <i class="material-icons prefix">lock_outline</i>
+                          <textarea id="signup_password_input" class="materialize-textarea"></textarea>
+                          <label for="signup_password_input">Password</label>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="row">
+                      <form class="col s12">
+                        <div class="row">
+                          <div class="input-field col s12">
+                            <i class="material-icons prefix">lock_outline</i>
+                            <textarea id="signup_password_repeat_input" class="materialize-textarea"></textarea>
+                            <label for="signup_password_repeat_input">Repeat Password</label>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+  
+                  <div class="row">
+                      <form class="col s12">
+                        <div class="row">
+                          <h5 id = "validation_error_text_signup" class = "red-text center-align"></h5>
+                        </div>
+                      </form>
+                    </div>
+          </div>
+          <div class="modal-footer light-blue">
+            
+                <a href="#" id="signup_modal_btn" class="waves-effect waves-light orange btn">Sign up</a>
+  
+                <a href="#signup_modal" id = "close_signup_modal" class="waves-effect waves-light orange btn modal-close">Close</a>
+           
+            
+          </div>
+        </div>
+
+      
+
+      <!-- Modal Structure -->
+      <div id="login_modal" class="modal modal-fixed-footer">
+        <div class="modal-content grey lighten-5">
+          <div class ="row">
+            <h4 class = "col s12 center-align modal-title light-blue-text">Login</h4>
+          </div>
+            <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">perm_identity</i>
+                      <textarea id="login_email_input" class="materialize-textarea"></textarea>
+                      <label for="login_email_input">Email</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div class="row">
+                  <form class="col s12">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <i class="material-icons prefix">lock_outline</i>
+                        <textarea id="login_password_input" class="materialize-textarea"></textarea>
+                        <label for="login_password_input">Password</label>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="row">
+                    <form class="col s12">
+                      <div class="row">
+                        <h5 id = "validation_error_text_login" class = "red-text center-align"></h5>
+                      </div>
+                    </form>
+                  </div>
+        </div>
+        <div class="modal-footer light-blue">
+         
+              <a href="#" id="login_modal_btn" class="waves-effect waves-light orange btn">Login</a>
+
+              <a href="#login_modal" id = "close_login_modal" class="waves-effect waves-light orange btn modal-close">Close</a>
+      
+          
+        </div>
+      </div>
+
+      
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center orange-text weight-600">PhotoSafe</h1>
+      <div class="row center">
+        <h5 class="header col s12 light weight-500">Best Way To Keep Your Photos Private</h5>
+      </div>
+      <div class="row center">
+
+     
+        <a href="#signup_modal" id="open_signup_modal" class="btn-large waves-effect waves-light orange modal-trigger ">Create Account</a>
+      </div>
+      <br><br>
+
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="fas fa-lock"></i></h2>
+            <h5 class="center weight-500">Confidentially</h5>
+
+            <p class="light ">In information security, confidentiality "is the property, that information is not made available or disclosed to unauthorized individuals, entities, or processes."While similar to "privacy," the two words aren't interchangeable. Rather, confidentiality is a component of privacy that implements to protect our data from unauthorized viewers. Examples of confidentiality of electronic data being compromised include laptop theft, password theft, or sensitive emails being sent to the incorrect individuals.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="fas fa-shield-alt"></i></h2>
+            <h5 class="center weight-500">Integrity</h5>
+
+            <p class="light">In information security, data integrity means maintaining and assuring the accuracy and completeness of data over its entire lifecycle. This means that data cannot be modified in an unauthorized or undetected manner. This is not the same thing as referential integrity in databases, although it can be viewed as a special case of consistency as understood in the classic ACID model of transaction processing. Information security systems typically provide message integrity along side to confidentiality.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="fas fa-file-signature"></i></h2>
+            <h5 class="center weight-500">Non-repudiation</h5>
+
+            <p class="light">It is important to note that while technology such as cryptographic systems can assist in non-repudiation efforts, the concept is at its core a legal concept transcending the realm of technology. It is not, for instance, sufficient to show that the message matches a digital signature signed with the sender's private key, and thus only the sender could have sent the message, and nobody else could have altered it in transit (data integrity).</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <br><br>
+  </div>
+
+ 
+  
+
+  </body>
+</html>
