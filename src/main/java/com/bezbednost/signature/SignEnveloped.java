@@ -1,4 +1,4 @@
-package signature;
+package com.bezbednost.signature;
 
 import java.io.BufferedInputStream;
 import java.io.File;

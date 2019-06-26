@@ -29,7 +29,7 @@ import org.apache.xml.security.utils.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import signature.SignEnveloped;
+import com.bezbednost.signature.SignEnveloped;
 
 public class ReadData {
 	
