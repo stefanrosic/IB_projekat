@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 @Controller
 public class UploadDataController {
 	
-	private static String UPLOAD_DIRECTORY = "./";
+	private static String UPLOAD_DIRECTORY = "./upload_directory/";
 	
 	@PostMapping("/upload")
 	public String fileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes)
