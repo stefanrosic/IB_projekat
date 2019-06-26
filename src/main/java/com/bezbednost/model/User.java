@@ -1,12 +1,30 @@
 package com.bezbednost.model;
 
-public class User {
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
+public class User{
 	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", unique = true, nullable = false)
 	private int id;
+    
+    @Column(name = "email", unique = true, nullable = false)
 	private String email;
+    
+    @Column(name = "password", unique = false, nullable = false)
 	private String password;
+    
+    @Column(name = "certificate", unique = false, nullable = false)
 	private String certificate;
+	
+    @Column(name = "active", unique = false, nullable = false)
 	private boolean active;
+    
+    @OneToOne
+    @JoinColumn(name = "authority", referencedColumnName = "authority_id")
 	private Authority authority;
 	
 	public User() {}
