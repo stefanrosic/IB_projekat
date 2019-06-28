@@ -48,8 +48,27 @@ $(document).ready(function(){
       }else if(txtSignupPasswordInput.val() != txtSignupRepeatPasswordInput.val()){
         txtSignupValidationError.text("Passwords doesn't match!");
       }else{
-        txtSignupValidationError.text("ok");
-        //TODO: post data
+        var params = {
+          "email" : txtSignupEmailInput.val(),
+          "password" : txtSignupPasswordInput.val()          
+          }
+
+          $.ajax({
+            data: JSON.stringify(params),
+            type: "POST",
+            contentType: 'application/json',
+            url: "user/createAcc",
+            dataType: "json",
+            success: function(data){
+              txtSignupValidationError.text("Succesful registration, please wait for the administrator's approval.");
+            }, 
+            error: function (jqXHR, textStatus, errorThrown) {  
+              if(jqXHR.status=="403"){
+                txtSignupValidationError.text("Email already in use.");
+              }
+            }
+          });
+
       }
     });
 
