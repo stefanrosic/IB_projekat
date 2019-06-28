@@ -7,6 +7,8 @@ import com.bezbednost.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,9 @@ public class UserController {
     @Autowired
     private AuthorityServiceInterface authorityService;
 
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
     @PostMapping("/createAcc")
     public ResponseEntity<userDTO> createAccount(@RequestBody User user){
 
@@ -34,7 +39,7 @@ public class UserController {
         }
         u = new User();
         u.setEmail(user.getEmail());
-        u.setPassword(user.getPassword());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
         u.setActive(true);
         u.setAuthority(authority);
         u.setCertificate("aa");
