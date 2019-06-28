@@ -25,7 +25,5 @@ public class AuthenticationRequest {
 	public String toString() {
 		return "AuthenticationRequest [username=" + username + ", password=" + password + "]";
 	}
-	
-	
 
 }

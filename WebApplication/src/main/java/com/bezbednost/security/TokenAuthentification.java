@@ -37,4 +37,9 @@ public class TokenAuthentification extends AbstractAuthenticationToken{
 		return principle;
 	}
 
+	@Override
+	public String toString() {
+		return "TokenAuthentification [token=" + token + ", principle=" + principle + "]";
+	}
+	
 }
