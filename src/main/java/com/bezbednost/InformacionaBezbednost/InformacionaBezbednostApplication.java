@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @ComponentScan("com.bezbednost.service")
 @ComponentScan("com.bezbednost.controller")
+@ComponentScan("src/main/resources")
 @EntityScan("com.bezbednost.model")
 @EnableJpaRepositories("com.bezbednost.repository")
 public class InformacionaBezbednostApplication {
