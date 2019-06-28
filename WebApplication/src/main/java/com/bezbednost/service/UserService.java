@@ -49,4 +49,8 @@ public class UserService implements UserServiceInterface{
 		return user;
 	}
 
+	@Override
+	public User findById(int user_id) {
+		return userRepository.findById(user_id);
+	}
 }

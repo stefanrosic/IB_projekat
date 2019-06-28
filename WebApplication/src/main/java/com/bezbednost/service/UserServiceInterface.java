@@ -13,6 +13,8 @@ public interface UserServiceInterface {
 
 	User findByEmail(String email);
 
+	User findById(int user_id);
+
 	User save(User user);
 
 	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;

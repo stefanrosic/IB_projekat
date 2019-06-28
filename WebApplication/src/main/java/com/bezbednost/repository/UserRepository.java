@@ -8,4 +8,5 @@ import com.bezbednost.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
     User findByEmail(String email);
+    User findById(int user_id);
 }
