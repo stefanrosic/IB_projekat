@@ -35,7 +35,7 @@ public class UserController {
 
         User u = userService.findByEmail(user.getEmail());
         if(u != null){
-            return new ResponseEntity<userDTO>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<userDTO>(HttpStatus.OK);
         }
         u = new User();
         u.setEmail(user.getEmail());
