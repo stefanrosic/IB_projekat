@@ -1,12 +1,16 @@
 package com.bezbednost.model;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
@@ -22,19 +26,26 @@ public class User implements UserDetails{
     @Column(name = "password", unique = false, nullable = false)
 	private String password;
     
-    @Column(name = "certificate", unique = false, nullable = false)
+    @Column(name = "certificate", unique = false, nullable = true)
 	private String certificate;
 	
     @Column(name = "active", unique = false, nullable = false)
 	private boolean active;
     
-    @OneToOne
-    @JoinColumn(name = "authority", referencedColumnName = "authority_id")
-	private Authority authority;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "authority_id"))
+	private Set<Authority> authority;
+	
+	@ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+	@JoinTable(name="user_authority",
+			joinColumns=@JoinColumn(name="user_id",referencedColumnName="user_id"),
+			inverseJoinColumns = @JoinColumn(name="authority_id",referencedColumnName="authority_id"))
+	private Set<Authority> user_authorities = new HashSet<>();
+
 	
 	public User() {}
 
-	public User(int id, String email, String password, String certificate, boolean active, Authority authority) {
+	public User(int id, String email, String password, String certificate, boolean active, Set<Authority> authority) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -84,50 +95,53 @@ public class User implements UserDetails{
 		this.active = active;
 	}
 
-	public Authority getAuthority() {
+	public Set<Authority> getAuthority() {
 		return authority;
 	}
 
-	public void setAuthority(Authority authority) {
+	public void setAuthority(Set<Authority> authority) {
 		this.authority = authority;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Authority> getUser_authorities() {
+		return user_authorities;
 	}
+	
+	@Override
+	 public Collection<? extends GrantedAuthority> getAuthorities() {
+		 return this.user_authorities;
+	 }
 
+	public void setUser_authorities(Set<Authority> user_authorities) {
+		this.user_authorities = user_authorities;
+	}
+	
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.email;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+        return this.active;
 	}
-	
-	
 
 }
