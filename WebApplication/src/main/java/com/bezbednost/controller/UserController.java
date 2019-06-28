@@ -41,7 +41,7 @@ public class UserController {
         u.setEmail(user.getEmail());
         u.setPassword(passwordEncoder.encode(user.getPassword()));
         u.setActive(true);
-        u.setAuthority(authority);
+		u.getUser_authorities().add(authority);
         u.setCertificate("aa");
 
         u = userService.save(u);

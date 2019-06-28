@@ -21,16 +21,33 @@ $(document).ready(function(){
       }else if(txtLoginPasswordInput.val() == ""){
         txtValidationErrorLogin.text("Please enter your password!");
       }else{
-        params = {
-          "email" : txtLoginEmailInput.val(),
-          "password" : txtLoginPasswordInput.val()
-        }
-        $.post("/auth/login", params ,function(data){
-        	console.log('AAAAAAAAAAAAAAAAA')
-        	if(data != null){
-              window.location.replace('user.html');
-          }
-        });
+    	var data = {
+    			'username':txtLoginEmailInput.val(),
+    			'password':txtLoginPasswordInput.val()
+    	}
+    	console.log(data);
+    	$.ajax({
+    		type: 'POST',
+    	    contentType: 'application/json',
+    	    url: 'http://localhost:8080/authentication',
+    	    data: JSON.stringify(data),
+    	    dataType: 'json',
+    	    crossDomain: true,
+    	    cache: false,
+    		processData: false,
+    		success:function(response){
+    			var token = response.token;
+   
+    			localStorage.setItem("token",token);
+    				    				
+    			window.location.href = "user.html";	
+    		},
+    			error: function (jqXHR, textStatus, errorThrown) {  
+    				if(jqXHR.status=="401"){
+    					alert("Wrong email or password.");
+    				}
+    			}
+    		});
       }
     });
 

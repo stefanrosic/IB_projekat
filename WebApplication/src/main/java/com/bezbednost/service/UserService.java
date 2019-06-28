@@ -2,9 +2,11 @@ package com.bezbednost.service;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +16,10 @@ import com.bezbednost.repository.UserRepository;
 @Service
 public class UserService implements UserServiceInterface{
 
+	protected final Log LOGGER = LogFactory.getLog(getClass());
+	
+    @Autowired
     private UserRepository userRepository;
-	private static final Logger log = LoggerFactory.getLogger(UserService.class);
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
 	@Override
 	public List<User> findAll() {
@@ -41,9 +41,9 @@ public class UserService implements UserServiceInterface{
 		User user = userRepository.findByEmail(username);
 		
 		if (user == null) {
-			log.error("Bad credentials for username");
+			LOGGER.error("Bad credentials for username");
 		} else if (user.getAuthorities().size() == 0) {
-			log.error("Unathorized user");
+			LOGGER.error("Unathorized user");
 		}
 		
 		return user;
