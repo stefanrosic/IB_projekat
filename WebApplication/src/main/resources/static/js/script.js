@@ -26,6 +26,7 @@ $(document).ready(function(){
           "password" : txtLoginPasswordInput.val()
         }
         $.post("/auth/login", params ,function(data){
+        	console.log('AAAAAAAAAAAAAAAAA')
         	if(data != null){
               window.location.replace('user.html');
           }
