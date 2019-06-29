@@ -8,13 +8,12 @@ import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.bezbednost.dto.userDTO;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/user")
@@ -29,9 +28,9 @@ public class UserController {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/getAll")
-    public String getAll(){
+    public ResponseEntity<?> getAll(){
         Gson gson = new GsonBuilder().create();
-        return gson.toJson(userService.findAll());
+        return new ResponseEntity<>(gson.toJson(userService.findAll()) ,HttpStatus.OK);
     }
 
     @PostMapping("/createAcc")
@@ -56,20 +55,16 @@ public class UserController {
         return new ResponseEntity<userDTO>(new userDTO(u),HttpStatus.OK);
     }
 
-    @PostMapping("/activate")
-    public void activateAccount(@RequestParam("id") int id){
-        System.out.println(id);
+    @PostMapping("/activate/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+    public void activateAccount(@PathVariable("id") int id){
         User user = userService.findById(id);
         if(user != null){
             user.setActive(!user.isActive());
             userService.save(user);
-            System.out.println(user.isActive());
         }
 
     }
-
-
-
 
 }
 
