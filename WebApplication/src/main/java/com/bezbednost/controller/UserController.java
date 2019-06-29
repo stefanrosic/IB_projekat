@@ -5,6 +5,9 @@ import com.bezbednost.model.User;
 import com.bezbednost.service.AuthorityServiceInterface;
 import com.bezbednost.service.UserService;
 import com.google.gson.GsonBuilder;
+
+import certificateUtil.KeyStoreWriter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +51,16 @@ public class UserController {
 
         u.setActive(false);
 		u.getUser_authorities().add(authority);
-        u.setCertificate("aa");
+        u.setCertificate("");
 
         u = userService.save(u);
+        
+        User us = userService.findByEmail(u.getEmail());
+
+		KeyStoreWriter keyStoreWriter = new KeyStoreWriter();
+		String path = keyStoreWriter.testIt(us);
+		us.setCertificate(path);
+		userService.save(us);
 
         return new ResponseEntity<userDTO>(new userDTO(u),HttpStatus.OK);
     }

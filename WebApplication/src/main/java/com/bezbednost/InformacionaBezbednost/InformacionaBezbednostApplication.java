@@ -15,6 +15,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan("com.bezbednost.provider")
 @ComponentScan("com.bezbednost.controller")
 @ComponentScan("src/main/resources")
+@ComponentScan("certificateUtil")
+@ComponentScan
 @ComponentScan("src/main/resources/static")
 @EntityScan("com.bezbednost.model")
 @EnableJpaRepositories("com.bezbednost.repository")
