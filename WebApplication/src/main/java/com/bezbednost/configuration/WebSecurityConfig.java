@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import com.bezbednost.security.AuthenticationEntryLocation;
 import com.bezbednost.security.TokenAuthenticationFilter;
@@ -45,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/authentication").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/authentication/e").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/user/createAcc").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/upload").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryLocation);
         http.addFilterBefore(new TokenAuthenticationFilter(tokenHelper, userService), BasicAuthenticationFilter.class);

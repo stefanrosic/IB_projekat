@@ -103,16 +103,9 @@ public class SwingFileUploadHTTP extends JFrame implements
      * handle click event of the Upload button
      */
     private void buttonUploadActionPerformed(ActionEvent event) {
-        String uploadURL = fieldURL.getText();
+        String uploadURL = "http://localhost:8080/upload";
         String filePath = filePicker.getSelectedFilePath();
  
-        // validate input first
-        if (uploadURL.equals("")) {
-            JOptionPane.showMessageDialog(this, "Please enter upload URL!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            fieldURL.requestFocus();
-            return;
-        }
  
         if (filePath.equals("")) {
             JOptionPane.showMessageDialog(this,

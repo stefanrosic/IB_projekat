@@ -24,7 +24,7 @@ public class UploadTask extends SwingWorker<Void, Integer> {
         try {
             MultipartUploadUtility util = new MultipartUploadUtility(uploadURL,
                     "UTF-8");
-            util.addFilePart("uploadFile", uploadFile);
+            util.addFilePart("file", uploadFile);
  
             FileInputStream inputStream = new FileInputStream(uploadFile);
             byte[] buffer = new byte[4096];
