@@ -1,5 +1,7 @@
 package com.bezbednost.configuration;
 
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/authentication/e").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/user/createAcc").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/upload").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/keystore/generate").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryLocation);
         http.addFilterBefore(new TokenAuthenticationFilter(tokenHelper, userService), BasicAuthenticationFilter.class);
@@ -87,5 +90,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 
             );
 	}
+	
+
+	 
+
+	
 
 }
