@@ -51,6 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/user/createAcc").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/upload").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/keystore/generate").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/keystore/getjks").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryLocation);
         http.addFilterBefore(new TokenAuthenticationFilter(tokenHelper, userService), BasicAuthenticationFilter.class);
