@@ -48,7 +48,7 @@ public class SignEnveloped {
 	
 	private static final String IN_FILE = "./data/photos.xml";
 	private static final String OUT_FILE = "./data/photos_signed.xml";
-	private static final String KEY_STORE_FILE = "C:\\Users\\Boris\\Desktop\\as_jks.jks";
+	private static final String KEY_STORE_FILE = "C:/Users/Boris/Downloads/perajks.jks";
 	
   static {
   	//staticka inicijalizacija
@@ -61,10 +61,10 @@ public class SignEnveloped {
 		Document doc = loadDocument(IN_FILE);
 		
 		//ucitava privatni kljuc koji ce biti iskoriscen za potpisivanje dokumenta
-		PrivateKey pk = readPrivateKey();
+		PrivateKey pk = readPrivateKey(KEY_STORE_FILE);
 		
 		//ucitava sertifikat
-		Certificate cert = readCertificate();
+		Certificate cert = readCertificate(KEY_STORE_FILE);
 		
 		//potpisuje
 		System.out.println("Signing....");
@@ -142,20 +142,24 @@ public class SignEnveloped {
 	 * Ucitava sertifikat is KS fajla
 	 * alias primer
 	 */
-	public static Certificate readCertificate() {
+	public static Certificate readCertificate(String jksPath) {
+		String[] sp = jksPath.split("/");
+		String filename = sp[sp.length - 1];
+		System.out.println("filename: " + filename);
+		String alias =  filename.substring(0, filename.lastIndexOf('.'));
+		System.out.println("alias: " + alias);
 		try {
-			System.out.println("READ");
-			String[] sp = KEY_STORE_FILE.split("\\");
+			
+
 			//kreiramo instancu KeyStore
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 			
 			//ucitavamo podatke
 			BufferedInputStream in = new BufferedInputStream(new FileInputStream(KEY_STORE_FILE));
-			ks.load(in, "test".toCharArray());
+			ks.load(in, alias.toCharArray());
 			
-			if(ks.isKeyEntry("test")) {
-				Certificate cert = ks.getCertificate("test");
-				System.out.println("RETTTTTTTTTTTTTTTTTTT");
+			if(ks.isKeyEntry(alias)) {
+				Certificate cert = ks.getCertificate(alias);
 				return cert;
 				
 			}
@@ -187,17 +191,22 @@ public class SignEnveloped {
 	 * Ucitava privatni kljuc is KS fajla
 	 * alias primer
 	 */
-	public static PrivateKey readPrivateKey() {
+	public static PrivateKey readPrivateKey(String jksPath) {
+		String[] sp = jksPath.split("/");
+		String filename = sp[sp.length - 1];
+		
+		String alias =  filename.substring(0, filename.lastIndexOf('.'));
+		System.out.println(alias);
 		try {
 			//kreiramo instancu KeyStore
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 			
 			//ucitavamo podatke
 			BufferedInputStream in = new BufferedInputStream(new FileInputStream(KEY_STORE_FILE));
-			ks.load(in, "test".toCharArray());
+			ks.load(in, alias.toCharArray());
 			
-			if(ks.isKeyEntry("test")) {
-				PrivateKey pk = (PrivateKey) ks.getKey("test", "test".toCharArray());
+			if(ks.isKeyEntry(alias)) {
+				PrivateKey pk = (PrivateKey) ks.getKey(alias, alias.toCharArray());
 				return pk;
 			}
 			else
@@ -275,9 +284,9 @@ public class SignEnveloped {
 		}
 	}
 	
-	public static void main(String[] args) {
-		SignEnveloped sign = new SignEnveloped();
-		sign.testIt();
-	}
+//	public static void main(String[] args) {
+//		SignEnveloped sign = new SignEnveloped();
+//		sign.testIt();
+//	}
 
 }

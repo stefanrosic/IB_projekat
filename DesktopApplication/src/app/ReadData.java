@@ -120,13 +120,14 @@ public class ReadData {
 			
 			//--------------Signature--------------------------------
 			
-//			System.out.println("Enter your name: ");
-//			BufferedReader reader_jks = new BufferedReader(new InputStreamReader(System.in));
-//			
-//			String jks_path = reader.readLine();
+			System.out.println("Enter path to jks file: ");
+			BufferedReader reader_jks = new BufferedReader(new InputStreamReader(System.in));
 			
-			PrivateKey pk = SignEnveloped.readPrivateKey();		
-			Certificate cert = SignEnveloped.readCertificate();
+			String jks_path = reader.readLine();
+			
+			
+			PrivateKey pk = SignEnveloped.readPrivateKey(jks_path.replace("\\", "/"));		
+			Certificate cert = SignEnveloped.readCertificate(jks_path.replace("\\", "/"));
 			
 			XMLSignature sig = new XMLSignature(doc,  null, XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1);
 			Transforms transforms = new Transforms(doc);
