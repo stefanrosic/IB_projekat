@@ -47,11 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception{
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/authentication").permitAll();
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/authentication/e").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/user/createAcc").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/upload").permitAll();
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/keystore/generate").permitAll();
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryLocation);
         http.addFilterBefore(new TokenAuthenticationFilter(tokenHelper, userService), BasicAuthenticationFilter.class);

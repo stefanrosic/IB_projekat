@@ -83,21 +83,6 @@ public class TokenHelper {
 		return audience;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public String refreshToken(String token) {
-		String refreshedToken;
-		Date a = timeProvider.now();
-		try {
-			final Claims claims = this.getAllClaimsFromToken(token);
-			claims.setIssuedAt(a);
-			refreshedToken = Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
-					.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
-		} catch (Exception e) {
-			refreshedToken = null;
-		}
-		return refreshedToken;
-	}
-	
 	//METHOD WHICH GENERATE TOKEN, SET ISSUER(OUR APP), SER SUBJECT(USERNAME OF USER), SET DATE OF ISSUE(NOW), SET EXPIRE DATE
 	//AND SIGNATURE IT WITH SIGNATURE_ALGORITHM
 	public String generateToken(String username) {

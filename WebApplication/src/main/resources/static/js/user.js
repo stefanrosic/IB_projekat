@@ -10,7 +10,7 @@ $(document).ready(function(){
     getData();
             
     $.ajax({
-    	url:'http://localhost:8080/user/getCurrentRole',
+    	url:'https://localhost:8443/user/getCurrentRole',
     	headers:{Authorization:"Bearer " + token},
     	type: 'GET',
     	dataType:'json',
@@ -30,7 +30,7 @@ $(document).ready(function(){
     });
     
     $.ajax({
-    	url:'http://localhost:8080/user/getAllFiles',
+    	url:'https://localhost:8443/user/getAllFiles',
     	headers:{Authorization:"Bearer " + token},
     	type: 'GET',
     	dataType:'json',
@@ -81,7 +81,7 @@ $(document).ready(function(){
     $(document).on("click","#tab tbody tr td button", function() { // any button
         
     	$.ajax({
-    		url:'http://localhost:8080/user/activate/' + $(this).val(),
+    		url:'https://localhost:8443/user/activate/' + $(this).val(),
     		headers:{Authorization:"Bearer " + token},
     		type: 'POST',
     		dataType:'json',
@@ -99,7 +99,7 @@ $(document).ready(function(){
 function getData(){
 	var token = localStorage.getItem("token");
 	$.ajax({
-		url:'http://localhost:8080/user/getAll',
+		url:'https://localhost:8443/user/getAll',
 		headers:{Authorization:"Bearer " + token},
 		type: 'GET',
 		dataType:'json',

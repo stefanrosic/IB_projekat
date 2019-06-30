@@ -29,7 +29,7 @@ $(document).ready(function(){
     	$.ajax({
     		type: 'POST',
     	    contentType: 'application/json',
-    	    url: 'http://localhost:8080/authentication',
+    	    url: 'https://localhost:8443/authentication',
     	    data: JSON.stringify(data),
     	    dataType: 'json',
     	    crossDomain: true,
