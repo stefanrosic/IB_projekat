@@ -8,14 +8,25 @@ import com.google.gson.GsonBuilder;
 
 import certificateUtil.KeyStoreWriter;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +47,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    public static String userName;
 
     @Autowired
     private AuthorityServiceInterface authorityService;
@@ -43,6 +56,8 @@ public class UserController {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
     private static String DATA_DIR_PATH = "./upload_directory/";
+    private static String DATA_DIR_PATH_NON_ENCRYPTED = "./non_encrypted_directory/";
+
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll(){
@@ -51,21 +66,52 @@ public class UserController {
     }
     
     @GetMapping("/getAllFiles")
-    public ResponseEntity<?> getFiles(Principal principal) {
-    	//User user = userService.findByEmail(principal.getName());
-        final File folder = new File("./upload_directory/");
-
-        List<File> result = new ArrayList<>();
+    public ResponseEntity<?> getFiles(Principal principal) throws IOException {
+    	User user = userService.findByEmail(principal.getName());
+    	userName = user.getUsername();
+    	File user_folder = new File("./non_encrypted_directory/" + user.getEmail());
         List<String> filenames = new ArrayList<>();
+        generateDirForEncrypt(user);
+    	if (user_folder.exists()) {
+    		
+            final File folder = new File("./non_encrypted_directory/" + user.getEmail());
 
-        search(".*\\.rar", folder, result);
-        
-        for(File f: result) {
-        	filenames.add(f.getName());
-        }
+            List<File> result = new ArrayList<>();
+
+            search(".*\\.rar", folder, result);
+            
+            for(File f: result) {
+            	filenames.add(f.getName());
+            }
+            
+            return new ResponseEntity<>(filenames ,HttpStatus.OK);
+    	}else {
+    		
+    	    try{
+    	    	user_folder.mkdir();
+    	    } 
+    	    catch(SecurityException se){
+    	    	
+    	    }
+    	}
         
         return new ResponseEntity<>(filenames ,HttpStatus.OK);
 
+    }
+    
+    private void generateDirForEncrypt(User user) {
+    	File user_folder_encrpyt = new File("./upload_directory/" + user.getEmail());
+    	
+    	if (user_folder_encrpyt.exists()) {
+    		System.out.println("POSTOJI DIR ZA USERA");
+    	}else {
+    	    try{
+    	    	user_folder_encrpyt.mkdir();
+    	    } 
+    	    catch(SecurityException se){
+    	    	
+    	    }
+    	}
     }
 
     public static void search(final String pattern, final File folder, List<File> result) {
@@ -83,18 +129,24 @@ public class UserController {
 
         }
     }
+ 
     
 	@RequestMapping(value = "/download/{filename}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> download(@PathVariable("filename") String filename) {
-
+	public ResponseEntity<byte[]> download(@PathVariable("filename") String filename, Principal principal) {
 		File file = null;
+		User user = userService.findByEmail(principal.getName());
 		try {
-			file = getFile(DATA_DIR_PATH + filename);			
+			file = getFile(DATA_DIR_PATH_NON_ENCRYPTED + user.getEmail() + "/" + filename);			
 		}
 		catch (Exception e) {
 			System.out.println("NOT_FOUND");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} 
+		
+//		File input= new File(UPLOAD_DIRECTORY, filename);
+//		FileInputStream inStream = new FileInputStream(input);
+//		decryptAndClose(inStream, outStream);
+
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -146,9 +198,15 @@ public class UserController {
     @GetMapping("/getCurrentRole")
     public ResponseEntity<?> getRole(Principal principal){
     	User user = userService.findByEmail(principal.getName());
-    	System.out.println(user.getAuthority());
         Gson gson = new GsonBuilder().create();
         return new ResponseEntity<>(gson.toJson(user.getAuthority()) ,HttpStatus.OK);
+    }
+    
+    @GetMapping("/getCurrentUser")
+    public ResponseEntity<?> getUser(Principal principal){
+    	User user = userService.findByEmail(principal.getName());
+        Gson gson = new GsonBuilder().create();
+        return new ResponseEntity<>(gson.toJson(user) ,HttpStatus.OK);
     }
 
     @PostMapping("/createAcc")
@@ -163,6 +221,7 @@ public class UserController {
         u = new User();
         u.setEmail(user.getEmail());
         u.setPassword(passwordEncoder.encode(user.getPassword()));
+       
 
         u.setActive(false);
 		u.getUser_authorities().add(authority);
@@ -189,8 +248,30 @@ public class UserController {
             userService.save(user);
         }
     }
+    
+	public static void decryptAndClose(FileInputStream fis, FileOutputStream fos) 
+    throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
 
+		SecretKeySpec sks = new SecretKeySpec("1234567890123456".getBytes(), "AES");
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(Cipher.DECRYPT_MODE, sks);
+		
+		CipherInputStream cis = new CipherInputStream(fis, cipher);
+		
+		//wrap input with buffer stream
+		BufferedInputStream bis = new BufferedInputStream(cis); 
+		
+		//wrap output with buffer stream
+		BufferedOutputStream bos = new BufferedOutputStream(fos);       
+		
+		int b;
+		byte[] d = new byte[8];
+		while((b = bis.read(d)) != -1) {
+		    bos.write(d, 0, b);
+		}
+		bos.flush();
+		bos.close();
+		bis.close();
+	}
+	
 }
-
-
-
