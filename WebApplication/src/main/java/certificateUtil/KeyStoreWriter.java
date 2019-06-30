@@ -121,8 +121,11 @@ public class KeyStoreWriter {
 			//kreira se keystore, ucitava ks fajl, dodaje kljuc i sertifikat i sacuvaju se izmene
 			KeyStoreWriter keyStoreWriter = new KeyStoreWriter();
 			keyStoreWriter.loadKeyStore(null, "test".toCharArray());
-			keyStoreWriter.write(user.getEmail().concat("s_jks"), keyPair.getPrivate(), user.getPassword().toCharArray(), cert);
-			keyStoreWriter.saveKeyStore("./data/"+user.getEmail()+"s_jks.jks", user.getPassword().toCharArray());
+//			keyStoreWriter.write(user.getEmail().concat("s_jks"), keyPair.getPrivate(), user.getPassword().toCharArray(), cert);
+//			keyStoreWriter.saveKeyStore("./data/"+user.getEmail()+"s_jks.jks", user.getPassword().toCharArray());
+			
+			keyStoreWriter.write(user.getEmail().concat("s_jks"), keyPair.getPrivate(), "test".toCharArray(), cert);
+			keyStoreWriter.saveKeyStore("./data/"+user.getEmail()+"s_jks.jks", "test".toCharArray());
 			String path = "./data/"+user.getEmail()+"s_jks.jks";
 			return path;
 			

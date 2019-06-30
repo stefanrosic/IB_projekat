@@ -48,6 +48,7 @@ public class UserController {
         u = new User();
         u.setEmail(user.getEmail());
         u.setPassword(passwordEncoder.encode(user.getPassword()));
+       
 
         u.setActive(false);
 		u.getUser_authorities().add(authority);
