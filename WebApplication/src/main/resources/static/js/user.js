@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$("#users").hide();
 
 	var token = localStorage.getItem("token");
 	if (token == "undefined" || token == null || token == "null") {
@@ -7,7 +8,75 @@ $(document).ready(function(){
 	}
 	
     getData();
+            
+    $.ajax({
+    	url:'http://localhost:8080/user/getCurrentRole',
+    	headers:{Authorization:"Bearer " + token},
+    	type: 'GET',
+    	dataType:'json',
+    	crossDomain: true,
+    	success:function(response){
+    		for(var i=0; i<response.length; i++){
+    			var authority = response[i];
+
+    			if(authority.name=="ADMIN"){
+        			$("#users").show();
+    			}
+    		}
+    	},
+    	error: function (jqXHR, textStatus, errorThrown) {
+    		console.log('GRESKA')
+    	}
+    });
     
+    $.ajax({
+    	url:'http://localhost:8080/user/getAllFiles',
+    	headers:{Authorization:"Bearer " + token},
+    	type: 'GET',
+    	dataType:'json',
+    	crossDomain: true,
+    	success:function(response){
+    		for(var i=0; i<response.length; i++){
+    			var file = response[i];
+    			console.log(file)
+    			$('#uploads').append('<button type="button" Value="'+file+'"class="btn" id="us"><b>'+file+'</b></button>')
+    		}
+    	},
+    	error: function (jqXHR, textStatus, errorThrown) {
+    		console.log('GRESKA')
+    	}
+    });
+    
+    
+	$(document).on("click","#uploads #us", function(e) {
+		value = $(this).val();
+		downloadFile(value);
+	});
+
+	function downloadFile(file){
+		var token = localStorage.getItem("token");
+		console.log(token);
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', "user/download/"+file, true);
+		xhr.setRequestHeader("Authorization", "Bearer " + token);
+		xhr.responseType = 'blob';
+
+		xhr.onload = function(e) {
+			if (this.status == 200) {
+				var blob = this.response;
+				console.log(blob);
+				var a = document.createElement('a');
+				var url = window.URL.createObjectURL(blob);
+				a.href = url;
+				a.download = xhr.getResponseHeader('filename');
+				a.click();
+				window.URL.revokeObjectURL(url);
+			}
+		};
+
+		xhr.send();
+	}
 
     $(document).on("click","#tab tbody tr td button", function() { // any button
         
@@ -63,8 +132,8 @@ function getData(){
 	});
 }
 		
-$("#btn_log_out").click(function() {
-	localStorage.removeItem("token");
-	window.location.replace("index.html");
-});
+	$("#btn_log_out").click(function() {
+		localStorage.removeItem("token");
+		window.location.replace("index.html");
+	});
 });

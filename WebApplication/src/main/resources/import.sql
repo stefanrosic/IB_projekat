@@ -5,4 +5,4 @@ INSERT INTO authority(name)VALUES('ADMIN')
 INSERT INTO authority(name)VALUES('REGULAR')
 
 INSERT INTO user_authority(user_id,authority_id)VALUES(1,1)
-INSERT INTO user_authority(user_id,authority_id)VALUES(1,2)
+INSERT INTO user_authority(user_id,authority_id)VALUES(2,2)
