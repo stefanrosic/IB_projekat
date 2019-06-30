@@ -56,10 +56,15 @@ public class UserController {
         final File folder = new File("./upload_directory/");
 
         List<File> result = new ArrayList<>();
+        List<String> filenames = new ArrayList<>();
 
         search(".*\\.rar", folder, result);
         
-        return new ResponseEntity<>(result ,HttpStatus.OK);
+        for(File f: result) {
+        	filenames.add(f.getName());
+        }
+        
+        return new ResponseEntity<>(filenames ,HttpStatus.OK);
 
     }
 
@@ -71,7 +76,7 @@ public class UserController {
             }
 
             if (f.isFile()) {
-                if (f.getName().matches(pattern) || f.getName().matches(".*\\.png") || f.getName().matches(".*\\.jpg") || f.getName().matches(".*\\.jpeg")) {
+                if (f.getName().matches(pattern) || f.getName().matches(".*\\.png") || f.getName().matches(".*\\.jpg") || f.getName().matches(".*\\.jpeg") || f.getName().matches(".*\\.zip")) {
                     result.add(f);
                 }
             }

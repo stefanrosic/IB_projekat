@@ -39,8 +39,7 @@ $(document).ready(function(){
     		for(var i=0; i<response.length; i++){
     			var file = response[i];
     			console.log(file)
-    			$('#uploads').append('<button type="button" Value="'+file+'"class="btn" id="us"><b>'+file.substring(77, 150)+'</b></button>')
-
+    			$('#uploads').append('<button type="button" Value="'+file+'"class="btn" id="us"><b>'+file+'</b></button>')
     		}
     	},
     	error: function (jqXHR, textStatus, errorThrown) {
@@ -51,8 +50,7 @@ $(document).ready(function(){
     
 	$(document).on("click","#uploads #us", function(e) {
 		value = $(this).val();
-		var filename = value.substring(77);
-		downloadFile(filename)
+		downloadFile(value);
 	});
 
 	function downloadFile(file){
