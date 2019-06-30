@@ -155,7 +155,7 @@ public class SignEnveloped {
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 			
 			//ucitavamo podatke
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(KEY_STORE_FILE));
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(jksPath.replace("?", "")));
 			ks.load(in, alias.toCharArray());
 			
 			if(ks.isKeyEntry(alias)) {
@@ -202,7 +202,7 @@ public class SignEnveloped {
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 			
 			//ucitavamo podatke
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(KEY_STORE_FILE));
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(jksPath.replace("?", "")));
 			ks.load(in, alias.toCharArray());
 			
 			if(ks.isKeyEntry(alias)) {
