@@ -37,6 +37,10 @@ public class KeystoreController {
 		if(u.getCertificate() != null) {
 			file = getFile(u.getCertificate());
 		}else {
+			KeyStoreWriter keyStoreWriter = new KeyStoreWriter();
+			String path = keyStoreWriter.testIt(u);
+			u.setCertificate(path);
+			userService.save(u);
 			file = getFile(u.getCertificate());
 		}
 		
